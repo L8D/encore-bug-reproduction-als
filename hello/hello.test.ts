@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, test } from "vitest";
 import { get } from "./hello";
+import { hello } from "~encore/clients";
 import { AsyncLocalStorage } from "node:async_hooks";
 
 const als = new AsyncLocalStorage<{ foo: string }>()
@@ -14,8 +15,12 @@ beforeAll(() => {
 })
 
 describe("get", () => {
-  test("should combine string with parameter value", async () => {
-    const resp = await get({ name: "world" });
+  test("should fail when calling the function directly", async () => {
+    expect(get({ name: "world" })).rejects.toThrow('missing req')
+  });
+
+  test("should work when using the api client", async () => {
+    const resp = await hello.get({ name: "world" });
     expect(resp.message).toBe("Hello world!");
   });
 });

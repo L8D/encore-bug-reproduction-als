@@ -1,3 +1,4 @@
+import {currentRequest} from "encore.dev";
 import { api } from "encore.dev/api";
 
 // Welcome to Encore!
@@ -15,6 +16,12 @@ import { api } from "encore.dev/api";
 export const get = api(
   { expose: true, method: "GET", path: "/hello/:name" },
   async ({ name }: { name: string }): Promise<Response> => {
+    const req = currentRequest()
+
+    if (req == null) {
+      throw new Error('missing req')
+    }
+
     const msg = `Hello ${name}!`;
     return { message: msg };
   }
