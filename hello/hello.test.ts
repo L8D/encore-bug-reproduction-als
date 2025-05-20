@@ -5,13 +5,15 @@ import { AsyncLocalStorage } from "node:async_hooks";
 
 const als = new AsyncLocalStorage<{ foo: string }>()
 
-beforeAll(() => {
+beforeAll(async () => {
   als.enterWith({ foo: 'bar' })
   const store = als.getStore()
 
   if (store == null) {
     throw new Error('missing store')
   }
+
+  await hello.get({ name: "world" })
 })
 
 describe("get", () => {
